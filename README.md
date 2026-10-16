@@ -81,6 +81,19 @@ La compilación genera archivos optimizados en `dist/`. La revisión se abre en 
 
 `pnpm preview` sirve para revisar la compilación localmente. Para compartir el proyecto por internet, publica `dist/` en un proveedor de hosting.
 
+## Desplegar en GitHub Pages
+
+- **Landing publicada:** https://matiasmenesess.github.io/reversa/
+- **Prototipo:** https://matiasmenesess.github.io/reversa/app/
+
+El workflow `.github/workflows/deploy-pages.yml` instala las dependencias, compila y publica al enviar cambios a `main`. También puede ejecutarse desde **Actions → Deploy Reversa to GitHub Pages → Run workflow**. En **Settings → Pages**, la fuente debe ser **GitHub Actions**.
+
+```sh
+pnpm build:pages
+```
+
+Este comando prepara `dist/` con la base `/reversa/`, un documento real en `app/index.html` y `.nojekyll`. Así la aplicación puede abrirse o recargarse en `/reversa/app/` sin necesitar reglas de redirección del servidor. Los enlaces internos se adaptan a la base de publicación; en local se mantienen `/` y `/app`.
+
 ## Desplegar en Vercel
 
 El repositorio incluye `vercel.json` con los comandos, la carpeta de salida y la reescritura que permite abrir `/app` directamente.
@@ -108,7 +121,7 @@ Con la integración de GitHub activa, los siguientes cambios enviados a la rama 
 
 Se sirve un único `index.html`; `main.js` selecciona la experiencia según la ruta. La regla de `vercel.json` permite que `/app` cargue ese documento en lugar de devolver un 404, manteniendo la dirección del navegador. Los recursos compilados se sirven desde `dist/assets/`.
 
-Para otro proveedor: compila con `pnpm build`, publica `dist/` y configura una regla equivalente de fallback a `index.html`. El proyecto espera alojarse en la raíz del dominio.
+Para otro proveedor: compila con `pnpm build`, publica `dist/` y configura una regla equivalente de fallback a `index.html`. Esta compilación usa la raíz del dominio; `pnpm build:pages` prepara específicamente la subcarpeta de GitHub Pages.
 
 Referencias: [Vite en Vercel y rutas SPA](https://vercel.com/docs/frameworks/frontend/vite#using-vite-to-make-spas) · [Despliegue estático con Vite](https://vite.dev/guide/static-deploy.html).
 

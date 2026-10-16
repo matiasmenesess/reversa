@@ -25,6 +25,11 @@ document.querySelector('#app').innerHTML=`
 <section class="final-cta wrap"><div><p class="overline">MENOS VUELTAS PARA TU DEVOLUCIÓN.</p><h2>Más espacio<br>para seguir con tu día.</h2><p>Imagina una compra que necesitas devolver.<br>Prueba cómo sería delegar el recojo y la entrega con Reversa.</p></div><div>${cta('Quiero probar Reversa','orange')}<span>Sin registro · Sin cobro · Pedidos simulados</span></div><span class="cta-decoration" aria-hidden="true">↶</span></section>
 </main><footer class="site-footer wrap"><a href="/" class="brand" aria-label="Reversa, inicio"><img src="${logo}" alt="Reversa"></a><p>Dale la vuelta a tus devoluciones.<br><span>Prototipo académico · Propuesta en validación.</span></p><a href="/app">Entrar al prototipo ${icon('arrow')}</a><small>© 2026 Reversa</small></footer>`;
 
+// Resolve internal links against the deployment base, including project Pages.
+document.querySelectorAll('a[href^="/"]').forEach(link=>{
+  const route=link.getAttribute('href').slice(1).replace(/^app(?=#|$)/,'app/');
+  link.setAttribute('href',import.meta.env.BASE_URL+route);
+});
 const stageData=[['Solicitud registrada','Autorización y destino guardados.'],['Recojo programado','Una franja que encaja en tu agenda.'],['Paquete en traslado','El trayecto hacia el punto de la tienda.'],['Entrega registrada','Constancia disponible para consultar.']];
 function showStage(stage){document.querySelector('#preview-status').textContent=stageData[stage][0];document.querySelector('#preview-timeline').innerHTML=stageData.map(([title,desc],i)=>`<div class="timeline-step ${i<=stage?'done':''} ${i===stage?'current':''}"><span>${i<stage?icon('check'):i+1}</span><div><strong>${title}</strong><p>${desc}</p></div>${i===stage?'<small>EN ESTE EJEMPLO</small>':''}</div>`).join('');document.querySelectorAll('[data-stage]').forEach(b=>{const selected=Number(b.dataset.stage)===stage;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))})}
 showStage(1);
